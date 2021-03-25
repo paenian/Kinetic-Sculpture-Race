@@ -1,4 +1,4 @@
-$fn=10*1;  //More polygons
+
 
 //Defines whether a pre-defined song or the NoteString shall be used.
 SongPicker = "Star-Spangled Banner"; // [Note-String,Star-Spangled Banner]
@@ -13,26 +13,29 @@ LayerThickness = 0.4;
 StripeWidth = 41; // [30:50]
 
 //Defines the length of the stripe. 15 beats need a length around 60mm. The full 50 beats would need 200mm.
-StripeLength = 150+1850; // [10:200]
+StripeLength = 900; // [10:200]
 
 //For fine-tuning only: defines how far the c1 is away from the left stripe-border (in mm).
 MarginLeft = 5; // [2:10]
 
 //For fine-tuning only: defines the distance between the beats.
-BeatDistance = 4;
+BeatDistance = 8;
 
 //For fine-tuning only: defines the distance between the beats.
 ToneDistance = 2;
 
 //how big the note holes are
-note_hole_rad = 1.4;
+note_hole_rad = 1.2;
 
-$fn=36;
+Stripe = 4;
+StripeOverlap = 30;
+
+$fn=18;
 projection(cut = false){
-    Start();
+    translate([0,-Stripe*StripeLength,0]) Start(Stripe = Stripe);
 }
 
-module Start()
+module Start(Stripe = Stripe)
 {
 NoteString_AmericanAnthem = "a101|f103|d104|f106|d106|a108|e108|d210|d110|f113|f214|f114|e215|f115|d216|f116|f118|d118|g120|d120|a122|c122|a131|f133|d134|f106|d106|a108|e108|d210|d110|f113|f214|f114|e215|f115|d216|f116|f118|d118|g120|d120|a122|c122|";
 
@@ -49,7 +52,6 @@ NoteString_wreckingball = [
     //all you ever did was wreck me
         ["f2",25,7],["f2",25,8],["f2",26,4],["b2",26,5],["a2",26,6.33333],["g2",26,7.66666],["b2",27,1],
     //yeah you, you wreck me
-    
         ["a2",27,07],["d2",27,09],["a2",27,11],["d2",27,13],["a2",27,15],["c2",27,17],["a2",27,19],["c2",27,21],["c2",27,23],["e2",27,24],["d2",27,26],["e2",27,29],["d2",27,30],["e2",27,31],["f2",27,32],["d2",27,34],
     //I put you high up in the sky and now, you're not coming down
         ["a2",31,07],["d2",31,09],["a2",31,11],["d2",31,13],["a2",31,15],["c2",31,17],["a2",31,19],["c2",31,21],["c2",31,23],["e2",31,24],["d2",31,26],["e2",31,29],["d2",31,30],["e2",31,31],["f2",31,32],["d2",31,34],
@@ -71,22 +73,20 @@ NoteString_wreckingball = [
         ["f2",57,3],["f2",57,4],["b2",57,5],["a2",57,6],["g2",57,7],["f2",57,8],["b2",58,5],["a2",58,6.33333],["g2",58,7.66666],["b2",59,1],
     //all you ever did was wreck me
         ["f2",59,7],["f2",59,8],["f2",60,4],["b2",60,5],["a2",60,6.33333],["g2",60,7.66666],["b2",61,1],
-    //yeah you, you wreck me
-        
-        
-    ];
+    //yeah you, you wreck me 
+];
 
 if( SongPicker == "Star-Spangled Banner")
-	BuildStripe(NoteString_wreckingball);
+	BuildStripe(NoteString_wreckingball, Stripe);
 else if (SongPicker == "Note-String")
 	BuildStripe(NoteString);
 }
 
-module BuildStripe(NoteStringLocal){
+module BuildStripe(NoteStringLocal, Stripe=Stripe){
 	//takte=search("|",NoteStringLocal,1000)[0];
 	difference()
 	{
-		BuildBase();
+		BuildBase(Stripe);
 		for(i=[0:len(NoteStringLocal)-1])
 		{
             echo(NoteStringLocal[i]);
@@ -141,8 +141,8 @@ module MakeHole(beatNumber,pitchNumber){
 	translate([X,Y,-1]) cylinder(h=LayerThickness*20,r=note_hole_rad);
 }
 
-module BuildBase(){
-	cube([StripeWidth,StripeLength,LayerThickness]);
+module BuildBase(Stripe=Stripe){
+	translate([0,Stripe*StripeLength]) cube([StripeWidth,StripeLength+StripeOverlap,LayerThickness]);
 }
 
 
