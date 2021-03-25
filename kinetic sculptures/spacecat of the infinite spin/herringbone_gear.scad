@@ -5,7 +5,7 @@ use <pin2.scad>;
 //PARAMETERS------------------------------------------------------------------
 //----------------------------------------------------------------------------
 
-object=0; //[0=planetary gear:1=carrier:2=both:4=sun pin:5=long sun pin::8=motor attachment pin:9=motor clamp]
+object=8; //[0=planetary gear:1=carrier:2=both:4=sun pin:5=long sun pin::8=motor attachment pin:9=motor clamp]
 
 gear_chamfer = .250;
 gear_chamfer_b = -.50;
@@ -193,6 +193,60 @@ if(object == 8){    //motor attachment
                 translate([0,0,-20-1.5]) cylinder(r2=3.5, r1=1.5, h=20, $fn=72);
             }
             }
+            
+        //hole for the motor's long shaft
+        translate([0,0,4]) translate([0,-length/2,0]) rotate([90,0,0]) {
+            #cylinder(r=2.25, h=75, center=true, $fn=72);
+        } 
+        
+        //translate([0,0,-100]) cube([200,200,200], center=true);
+        translate([0,0,100+7.8855]) cube([200,200,200], center=true);
+    }
+}
+
+if(object == 82){    //motor attachment
+    flange_rad = 22/2;
+    screw_circle_rad = 16/2;
+    shaft_len = 23;
+    $fn=36;
+    
+    length = 50;
+    difference(){
+        union(){
+            //peg side
+            translate([0,length/2,0])
+                pinpeg(r=spinrad,l=spinlen,nub=spinnub,t=spinthick,fixed=true,fins=false);
+                
+            //joining cylinder
+            translate([0,6,4]) rotate([90,0,0]) cylinder(r1=spinrad-.29, r2=spinrad+1, h=length-12, center=true, $fn=20);
+            translate([0,-6-7+.1,4]) rotate([90,0,0]) cylinder(r2=4, r1=spinrad+1, h=12.1, $fn=20);
+            
+            //flange for clamp screws
+            translate([-.75-3,-length/4,4-5]) rotate([0,90,0]) cylinder(r=5, h=6+1.5);
+            
+        }
+        translate([0,length/2,0]){
+            hull(){
+                cylinder(r=2.7, h=30, center=true, $fn=72);
+                translate([0,-6,0]) cylinder(r=1, h=30, center=true, $fn=72);
+            }
+        }
+        
+        //motor shaft hole
+        translate([0,-length/2,4]) rotate([90,0,0]) {
+            cylinder(r=4.1/2, h=shaft_len*2, center=true, $fn=36);
+            cylinder(r=3.3/2, h=shaft_len*2+15, center=true, $fn=36);
+        }
+        
+        //slit
+        translate([-.75,-length/2-.1,4-10.1]) cube([1.5,shaft_len+2.5,10.1]);
+        
+        //screwholes for the clamp
+        translate([-.75-3-5,-length/4,4-5]) rotate([0,90,0]) {
+            cylinder(r=1.6, h=6+1.5+10);
+            translate([0,0,-4]) cylinder(r=3.1, h=10);
+            translate([0,0,2+10]) cylinder(r=7.1/2, h=10, $fn=4);
+        }
         
         //translate([0,0,-100]) cube([200,200,200], center=true);
         translate([0,0,100+7.8855]) cube([200,200,200], center=true);
