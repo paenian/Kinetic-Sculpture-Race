@@ -25,15 +25,15 @@ BeatDistance = 8;
 ToneDistance = 2;
 
 //how big the note holes are
-note_hole_rad = 1.2;
+note_hole_rad = .8;
 
-Stripe = 0;
+Stripe = 1;
 StripeOverlap = 50;
 
 $fn=18;
-//projection(cut = false){
+projection(cut = false){
     translate([0,-Stripe*StripeLength,0]) Start(Stripe = Stripe);
-//}
+}
 
 module Start(Stripe = Stripe)
 {
