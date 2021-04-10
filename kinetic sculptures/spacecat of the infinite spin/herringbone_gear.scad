@@ -171,13 +171,16 @@ if(object == 8){    //motor attachment
                 pinpeg(r=spinrad,l=spinlen,nub=spinnub,t=spinthick,fixed=true,fins=false);
     
             //joining cylinder
-            translate([0,0,4]) rotate([90,0,0]) cylinder(r1=spinrad-.29, r2=spinrad+1, h=length, center=true, $fn=20);
+            translate([0,0,4]) rotate([90,0,0]) cylinder(r1=spinrad-.29, r2=spinrad+1.5, h=length, center=true, $fn=20);
             
             //motor side
-            translate([0,0,4]) translate([0,-length/2,0]) rotate([90,0,0]) {
+            *translate([0,0,4]) translate([0,-length/2,0]) rotate([90,0,0]) {
                 cylinder(r=flange_rad, h=3, center=true, $fn=72);
                 translate([0,0,-1.49-2]) cylinder(r2=spinrad+2, r1=spinrad-.29, h=2);
             }
+            
+            //cross support
+            translate([0,-length/2+8,4]) rotate([0,90,0]) cylinder(r=3+1.75, h=16, center=true, $fn=72);
         }
         translate([0,length/2,0]){
             hull(){
@@ -187,7 +190,7 @@ if(object == 8){    //motor attachment
         }
         
         //screwholes to the motor
-        translate([0,0,4]) translate([0,-length/2,0]) rotate([90,0,0]) {
+        *translate([0,0,4]) translate([0,-length/2,0]) rotate([90,0,0]) {
             for(i=[0:90:359]) rotate([0,0,i]) translate([screw_circle_rad,0,0]) {
                 cylinder(r=1.7, h=10, center=true, $fn=72);
                 translate([0,0,-20-1.5]) cylinder(r2=3.5, r1=1.5, h=20, $fn=72);
@@ -196,8 +199,11 @@ if(object == 8){    //motor attachment
             
         //hole for the motor's long shaft
         translate([0,0,4]) translate([0,-length/2,0]) rotate([90,0,0]) {
-            #cylinder(r=2.25, h=75, center=true, $fn=72);
-        } 
+            cylinder(r=4, h=50, center=true, $fn=72);
+        }
+        
+        //cross hole to pin to the motor shaft
+        #translate([0,-length/2+8,4]) rotate([0,90,0]) cylinder(r=1.75, h=25, center=true, $fn=72);
         
         //translate([0,0,-100]) cube([200,200,200], center=true);
         translate([0,0,100+7.8855]) cube([200,200,200], center=true);
